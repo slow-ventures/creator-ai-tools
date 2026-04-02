@@ -41,7 +41,7 @@ claude --version
 ### 1. Clone the template and install
 
 ```bash
-git clone https://github.com/TanookiLabs/hackathon-starter-nextjs.git slow-hackathon
+git clone https://github.com/slow-ventures/creator-ai-tools.git slow-hackathon
 cd slow-hackathon
 rm -rf .git
 npm install
