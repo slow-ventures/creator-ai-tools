@@ -40,4 +40,17 @@
 
 ---
 
+### Showing Data on a Map
+
+- **Leaflet.js** — Lightweight open-source JavaScript library for interactive maps (~42 KB gzipped). Supports tile layers, markers, popups, polygons, and more. Mobile-friendly and works across all major browsers.
+  - Site: https://leafletjs.com
+  - GitHub: https://github.com/Leaflet/Leaflet
+  - **react-leaflet** — React wrapper for Leaflet, the standard way to use it in Next.js apps.
+    - Site: https://react-leaflet.js.org
+    - GitHub: https://github.com/PaulLeCam/react-leaflet
+    - Install: `npm install leaflet react-leaflet @types/leaflet`
+    - Note: Requires `"use client"` and `dynamic(() => import(...), { ssr: false })` in Next.js since Leaflet needs the browser DOM.
+
+---
+
 ## Links Mentioned
