@@ -1,8 +1,5 @@
 # Slow Creator Hackathon - Show Notes
 
-## Teams
-
----
 
 ### Social Analytics Tracking & Analysis
 
@@ -30,13 +27,26 @@
 
 ### Media Tagging and Reuse
 
-*(links coming soon)*
+- **Gemini 3 Flash Preview** (`gemini-3-flash-preview`) — Google's multimodal model with strong image understanding. Use it for auto-tagging photos and videos with descriptions, categories, objects, people, locations, etc. Fast and cheap for bulk media analysis.
+  - API docs: https://ai.google.dev/gemini-api/docs
+  - Model ID: `gemini-3-flash-preview`
+
+- **Gemini 3.1 Flash Image Preview** (`gemini-3.1-flash-image-preview`) — AKA "Nano Banana 2". Gemini model that can *generate* images in addition to understanding them. Useful for creating thumbnails, variations, or styled versions of existing media.
+  - API docs: https://ai.google.dev/gemini-api/docs
+  - Model ID: `gemini-3.1-flash-image-preview`
 
 ---
 
 ### Personal Workflow Management
 
-*(links coming soon)*
+- **Apollo.io** — Sales intelligence and engagement platform. Access a database of 270M+ contacts and 60M+ companies for lead enrichment, email finding, and outreach automation. Has a REST API for programmatic lookups.
+  - Site: https://www.apollo.io
+  - API docs: https://apolloio.github.io/apollo-api-docs/
+
+- **People Data Labs (PDL)** — Person and company data API for enrichment, search, and identity resolution. Access 3B+ person profiles with emails, jobs, social links, education, and more. Great for enriching CRM records or building audience profiles.
+  - Site: https://www.peopledatalabs.com
+  - API docs: https://docs.peopledatalabs.com
+  - GitHub: https://github.com/peopledatalabs
 
 ---
 
@@ -53,4 +63,28 @@
 
 ---
 
-## Links Mentioned
+### Stripe Payments
+
+- **Stripe** — Payment processing platform for internet businesses. Handles subscriptions, one-time payments, invoicing, payouts, and more.
+  - Site: https://stripe.com
+  - Docs: https://docs.stripe.com
+
+- **Stripe CLI** — Command-line tool for testing and managing your Stripe integration locally. Lets you trigger webhook events, tail API logs, and create test resources without leaving the terminal.
+  - Install (macOS): `brew install stripe/stripe-cli/stripe`
+  - Docs: https://docs.stripe.com/stripe-cli
+  - Login: `stripe login` (authenticates with your Stripe account)
+
+- **Stripe Claude Skills** — Pre-built Claude Code skills for working with Stripe. Adds slash commands and tools so Claude can help you build Stripe integrations, create checkout sessions, manage subscriptions, and more.
+  - Install all skills: `npx skills add --all https://docs.stripe.com`
+  - Docs: https://docs.stripe.com/claude-code
+
+---
+
+## TAs — Tanooki Labs
+
+Need help? Reach out to the TAs from [Tanooki Labs](https://tanookilabs.com):
+
+| Name | Contact |
+|------|---------|
+| Dave Renz | dave `[at]` tanookilabs `[dot]` com |
+| Eric Skiff | eric `[at]` tanookilabs `[dot]` com |
