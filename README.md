@@ -1,6 +1,8 @@
 # Hackathon Starter: Next.js + Auth.js + Prisma
 
 > **[Show Notes: Tools, APIs & Strategies from the Hackathon](show-notes.md)** — Everything we covered: Ralph loops, Apify, Shopify JSON trick, Twilio, Stripe, data enrichment, mapping, and more.
+>
+> **[Eric's 201 Talk Slides](slides/slides.md)** — Advanced AI coding: complex apps, Ralph loops, Chrome integration, custom skills, deployment, background jobs, and more.
 
 Pre-configured for the AI Bootcamp with Slow Creator Fund. Uses Auth.js (NextAuth v5) for email/password authentication and Prisma ORM for type-safe database queries. No third-party auth services — everything runs through your own database.
 
