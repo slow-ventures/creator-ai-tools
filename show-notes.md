@@ -63,6 +63,77 @@
 
 ---
 
+### Instagram Scraping
+
+- **Apify** — Web scraping and automation platform with pre-built "actors" for scraping Instagram profiles, posts, captions, metadata, and more. Pay-as-you-go pricing starts at ~$5 to get going. Handles the hard parts of scraping (rate limits, login, pagination) so you don't have to.
+  - Site: https://apify.com
+  - Instagram scraper: https://apify.com/apify/instagram-scraper
+  - Docs: https://docs.apify.com
+  - Note: Getting actual video content analysis is more expensive, but profile/post metadata and captions are cheap.
+
+---
+
+### Shopify Product Data (No Scraping Needed)
+
+- **Shopify `.json` trick** — If a brand is on Shopify, you can get all their product data without scraping. Just append `.json` to any product page URL and you get structured JSON with product descriptions, images (high-res), variants, pricing, and more. Shopify publishes this so Google can index it — and you can use it too.
+  - Example: `https://example-brand.com/products/cool-shirt` → `https://example-brand.com/products/cool-shirt.json`
+  - Returns: product title, description, images (with CDN URLs), variants, prices, tags, etc.
+  - Also works on collection pages: `https://example-brand.com/collections/all.json`
+  - Tip: Use this instead of image scraping when the brand runs on Shopify — you get high-res images directly from their CDN.
+
+---
+
+### Messaging & WhatsApp Integration
+
+- **Twilio** — Cloud communications platform for SMS, WhatsApp, voice, email, and more. Use their API to send and receive messages programmatically. Supports WhatsApp Business API, Facebook Messenger, and other messaging channels.
+  - Site: https://www.twilio.com
+  - WhatsApp docs: https://www.twilio.com/docs/whatsapp
+  - SMS docs: https://www.twilio.com/docs/sms
+  - Note: For local development, pair with **ngrok** (below) so Twilio webhooks can reach your localhost.
+
+- **ngrok** — Tunneling tool that exposes your local development server to the internet with a public URL. Essential for testing webhooks (Stripe, Twilio, etc.) during local development. Once you deploy to production, you won't need it anymore.
+  - Site: https://ngrok.com
+  - Install (macOS): `brew install ngrok`
+  - Usage: `ngrok http 3000` (creates a public URL that forwards to your localhost:3000)
+  - Free tier available for basic use.
+
+---
+
+### Cloud Hosting
+
+- **Digital Ocean** — Cloud infrastructure provider. Simpler and more beginner-friendly alternative to AWS. Good for deploying apps, databases, and background workers.
+  - Site: https://www.digitalocean.com
+  - App Platform docs: https://docs.digitalocean.com/products/app-platform/
+
+---
+
+### AI Company & Operations Tools
+
+- **General Intelligence** — A new startup building an AI-powered platform that claims to let you create and run a company within their product, including marketing and operations handled by AI agents. Still very early stage but worth watching.
+  - Site: https://generalintelligence.com
+
+---
+
+### Development Workflows & Strategies
+
+- **Ralph Loops** — A Claude Code development workflow named after Ralph Wiggum ("just dumb, but he'll keep trying"). The idea: give Claude a task, and when it fails, it checks its own work and retries automatically. The key trifecta workflow:
+  1. **Plan** — Break the feature into bite-sized chunks
+  2. **Ticket** — Create Linear tickets for each chunk
+  3. **Smoke test** — Define what "done" looks like
+  4. **Ralph Loop** — Let Claude keep trying until each chunk passes its smoke test
+  - This lets you prompt just a few times and then let Claude grind through the implementation. Multiple participants cited this as the biggest unlock from the hackathon.
+
+- **Linear + Claude Code workflow** — Use Claude to create tickets in Linear from your implementation plan, then knock them out one by one with Claude Code. Keeps work organized and gives you a clear backlog to work through.
+
+---
+
+### Hardware
+
+- **Espresso Display** — Portable 4K touchscreen monitor. Touch input lets you circle things and draw on screen, which is helpful for vibe coding sessions. Lightweight and easy to bring to hackathons.
+  - Site: https://espres.so
+
+---
+
 ### Stripe Payments
 
 - **Stripe** — Payment processing platform for internet businesses. Handles subscriptions, one-time payments, invoicing, payouts, and more.
