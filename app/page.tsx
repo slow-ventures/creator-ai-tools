@@ -17,7 +17,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
           <div className="flex flex-col gap-16 items-center">
             <h1 className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-              Next.js + Auth.js + Prisma
+              Next.js + Better Auth + Prisma
             </h1>
             <p className="text-center text-muted-foreground max-w-md">
               A hackathon starter template with email/password authentication, type-safe database

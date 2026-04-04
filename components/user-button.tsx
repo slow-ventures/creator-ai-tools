@@ -7,10 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { signOut, useSession } from "next-auth/react"
+import { authClient } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
 
 export function UserButton() {
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
+  const router = useRouter()
 
   if (!session?.user) return null
 
@@ -25,7 +27,14 @@ export function UserButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => signOut()}>Sign out</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            await authClient.signOut()
+            router.push("/sign-in")
+          }}
+        >
+          Sign out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

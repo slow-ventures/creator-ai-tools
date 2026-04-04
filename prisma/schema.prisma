@@ -9,60 +9,72 @@ datasource db {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// Auth.js tables — required for authentication
-// Do not rename these models or their fields; Auth.js expects this exact schema.
+// Better Auth tables — required for authentication
+// Do not rename these models or their fields; Better Auth expects this exact schema.
 // ═══════════════════════════════════════════════════════════════
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
   image         String?
-  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  accounts Account[]
   sessions Session[]
+  accounts Account[]
 
-  @@map("users")
-}
-
-model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-  @@map("accounts")
+  @@unique([email])
+  @@map("user")
 }
 
 model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  @@id([identifier, token])
-  @@map("verification_tokens")
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
 
 // ═══════════════════════════════════════════════════════════════

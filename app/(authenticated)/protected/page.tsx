@@ -1,9 +1,12 @@
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 import { InfoIcon } from "lucide-react"
 import { Suspense } from "react"
 
 async function UserDetails() {
-  const session = await auth()
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
   return (
     <div className="flex flex-col gap-2 items-start">
       <h2 className="font-bold text-2xl mb-4">Your user details</h2>

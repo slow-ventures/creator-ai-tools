@@ -1,4 +1,3 @@
-import { SessionProvider } from "@/components/session-provider"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
 import { Geist } from "next/font/google"
@@ -11,7 +10,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Hackathon Starter",
-  description: "Next.js + Auth.js + Prisma starter template",
+  description: "Next.js + Better Auth + Prisma starter template",
 }
 
 const geistSans = Geist({
@@ -28,16 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

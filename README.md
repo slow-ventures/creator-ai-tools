@@ -1,15 +1,15 @@
-# Hackathon Starter: Next.js + Auth.js + Prisma
+# Hackathon Starter: Next.js + Better Auth + Prisma
 
 > **[Show Notes: Tools, APIs & Strategies from the Hackathon](show-notes.md)** — Everything we covered: Ralph loops, Apify, Shopify JSON trick, Twilio, Stripe, data enrichment, mapping, and more.
 >
 > **[Eric's 201 Talk Slides](slides/slides.md)** — Advanced AI coding: complex apps, Ralph loops, Chrome integration, custom skills, deployment, background jobs, and more.
 
-Pre-configured for the AI Bootcamp with Slow Creator Fund. Uses Auth.js (NextAuth v5) for email/password authentication and Prisma ORM for type-safe database queries. No third-party auth services — everything runs through your own database.
+Pre-configured for the AI Bootcamp with Slow Creator Fund. Uses Better Auth for email/password authentication and Prisma ORM for type-safe database queries. No third-party auth services — everything runs through your own database.
 
 ## What's Included
 
 - **Next.js** (App Router) with TypeScript
-- **Auth.js** (NextAuth v5) for email/password authentication (bcrypt hashed, JWT sessions)
+- **Better Auth** for email/password authentication (database sessions, built-in API endpoints)
 - **Prisma ORM** for type-safe database queries (schema-first, auto-syncs to your database)
 - **Tailwind CSS** + **shadcn/ui** components
 - **Claude Code config** (CLAUDE.md + custom slash commands)
@@ -28,7 +28,7 @@ Make sure you have all of these installed before starting. Click the **Setup gui
 | **VS Code** | [code.visualstudio.com](https://code.visualstudio.com/) | [Step-by-step guide](guides/prerequisites/vscode.md) |
 | **Claude Code** | `npm install -g @anthropic-ai/claude-code` | [Step-by-step guide](guides/prerequisites/claude-code.md) |
 | **Vercel** | [vercel.com](https://vercel.com/) (sign in with GitHub) | [Step-by-step guide](guides/prerequisites/vercel.md) |
-| **Supabase** | [supabase.com](https://supabase.com/) | [Step-by-step guide](guides/prerequisites/supabase.md) |
+| **Neon** | [neon.tech](https://neon.tech/) | [Step-by-step guide](guides/prerequisites/neon.md) |
 
 Verify your tools are installed:
 
@@ -101,27 +101,26 @@ cp .env.example .env
 Now generate a secret key for authentication. Run this in your terminal:
 
 ```bash
-npx auth secret
+openssl rand -base64 32
 ```
 
-This prints a random secret string. Copy it, open `.env` in your editor, and paste it as the value for `AUTH_SECRET`. Leave the file open — you'll fill in the database credentials in the next step.
+This prints a random secret string. Copy it, open `.env` in your editor, and paste it as the value for `BETTER_AUTH_SECRET`. Leave the file open — you'll fill in the database credentials in the next step.
 
-### 4. Set up Supabase
+### 4. Set up Neon
 
-You'll create **two Supabase projects** — one for development and one for production. This keeps your dev data completely separate from your live app.
+You'll create a **Neon project** with two branches — one for development and one for production. This keeps your dev data completely separate from your live app.
 
-1. Go to [supabase.com/dashboard](https://supabase.com/dashboard)
-2. Create a project named `slow-hackathon-dev`
-3. Create a second project named `slow-hackathon-prod`
-4. For each project, go to **Connect** → **ORMs** tab → select **Prisma** → copy the `DATABASE_URL` and `DIRECT_URL`
+1. Go to [console.neon.tech](https://console.neon.tech/)
+2. Create a project named `slow-hackathon`
+3. On the project dashboard, go to **Connection Details**
+4. Select **Prisma** from the framework dropdown
+5. Copy the `DATABASE_URL` and `DIRECT_URL`
 
-> ⚠️ **Important:** You need both URLs. `DATABASE_URL` uses the connection pooler (port `6543`). `DIRECT_URL` is for migrations and uses the direct connection (port `5432`).
+> ⚠️ **Important:** You need both URLs. `DATABASE_URL` uses the connection pooler (has `-pooler` in the hostname). `DIRECT_URL` is for migrations and uses the direct connection.
 
-Save both pairs of connection strings — you'll use the dev ones locally and the prod ones in Vercel.
-
-Paste your **dev** connection strings into `.env`:
-- `DATABASE_URL` — your **dev** Supabase pooled connection string
-- `DIRECT_URL` — your **dev** Supabase direct connection string
+Paste your connection strings into `.env`:
+- `DATABASE_URL` — your Neon pooled connection string
+- `DIRECT_URL` — your Neon direct connection string
 
 ### 5. Push the database schema
 
@@ -171,22 +170,28 @@ This is the only step that requires the Vercel dashboard — everything else is 
 #### Add production environment variables
 
 ```bash
-npx vercel env add AUTH_SECRET production
+npx vercel env add BETTER_AUTH_SECRET production
 ```
 
 When prompted, paste the same secret you generated in step 3 and press Enter.
 
 ```bash
+npx vercel env add BETTER_AUTH_URL production
+```
+
+Enter your production URL (e.g., `https://slow-hackathon.vercel.app`).
+
+```bash
 npx vercel env add DATABASE_URL production
 ```
 
-Paste your **prod** Supabase pooled connection string (port `6543`).
+Paste your **prod** Neon pooled connection string (has `-pooler` in hostname).
 
 ```bash
 npx vercel env add DIRECT_URL production
 ```
 
-Paste your **prod** Supabase direct connection string (port `5432`).
+Paste your **prod** Neon direct connection string.
 
 #### Deploy
 
@@ -214,22 +219,22 @@ Or use the `/deploy` slash command in Claude Code, which does this for you.
 
 ```
 LOCAL DEVELOPMENT (main branch)
-  .env → DATABASE_URL + DIRECT_URL point to dev Supabase project
+  .env → DATABASE_URL + DIRECT_URL point to your Neon dev branch
   npm run db:push → syncs schema to dev database
   npm run dev → runs app against dev database
   git push → pushes to main (does NOT deploy)
 
 PRODUCTION (production branch → Vercel)
   git push origin main:production → triggers Vercel deploy
-  Vercel env vars → DATABASE_URL + DIRECT_URL point to prod Supabase project
+  Vercel env vars → DATABASE_URL + DIRECT_URL point to your Neon prod branch
   Vercel builds → prisma db push syncs schema to prod database → next build runs
   Your app and production database are both updated
 ```
 
 | Environment | Database | How Schema Gets Updated |
 |-------------|----------|------------------------|
-| **Local dev** | Dev Supabase project (from `.env`) | You run `npm run db:push` |
-| **Production** | Prod Supabase project (from Vercel env vars) | Automatic on every `git push origin main:production` |
+| **Local dev** | Neon dev branch (from `.env`) | You run `npm run db:push` |
+| **Production** | Neon prod branch (from Vercel env vars) | Automatic on every `git push origin main:production` |
 
 ## Using Claude Code
 
@@ -258,26 +263,31 @@ Tell Claude Code what you want to add. Some examples:
 
 ## Authentication
 
-Authentication uses **Auth.js (NextAuth v5)** with email/password. Passwords are hashed with bcrypt. Sessions use JWT tokens (no session table lookups on every request).
+Authentication uses **Better Auth** with email/password. Sessions are stored in the database (not JWTs), so they can be revoked at any time.
 
 ### Get the current user in a Server Component or Server Action
 
 ```typescript
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
-const session = await auth()
-const user = session?.user // { id, name, email }
+const session = await auth.api.getSession({
+  headers: await headers(),
+})
+const user = session?.user // { id, name, email, emailVerified, image, createdAt, updatedAt }
 ```
 
 ### Get the current user in a Client Component
 
 ```typescript
 "use client"
-import { useSession } from "next-auth/react"
+import { authClient } from "@/lib/auth-client"
 
-const { data: session } = useSession()
+const { data: session, isPending } = authClient.useSession()
 const user = session?.user
 ```
+
+No `<SessionProvider>` wrapper is needed — Better Auth uses reactive stores internally.
 
 ### Route protection
 
@@ -301,21 +311,23 @@ The `(authenticated)` folder name is a Next.js route group — it doesn't appear
 
 ### Add OAuth providers (optional)
 
-To add Google, GitHub, Discord, or other OAuth providers alongside email/password, edit `auth.ts`:
+To add Google, GitHub, Discord, or other OAuth providers alongside email/password, edit `lib/auth.ts`:
 
 ```typescript
-import Google from "next-auth/providers/google"
+import { betterAuth } from "better-auth"
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  // ...
-  providers: [
-    Credentials({ ... }),
-    Google,
-  ],
+export const auth = betterAuth({
+  // ...existing config
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
 })
 ```
 
-Then add `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` to your `.env`.
+Then add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to your `.env`.
 
 ## Database with Prisma ORM
 
@@ -385,19 +397,18 @@ Opens Prisma Studio — a visual data browser at localhost:5555.
 ## Project Structure
 
 ```
-auth.ts                         ← Auth.js configuration (credentials provider, JWT)
 proxy.ts                        ← Route protection (all routes require login by default)
 prisma/
   schema.prisma                 ← Database schema (auth tables + your tables)
   seed.ts                       ← Seed script (demo users)
 app/
   page.tsx                      ← Homepage (public)
-  layout.tsx                    ← Root layout (fonts, theme, SessionProvider)
+  layout.tsx                    ← Root layout (fonts, theme)
   globals.css                   ← Tailwind + CSS variables
   sign-in/page.tsx              ← Email/password sign-in form (public)
   sign-up/page.tsx              ← Registration form (public)
-  api/auth/[...nextauth]/
-    route.ts                    ← Auth.js API route handler
+  api/auth/[...all]/
+    route.ts                    ← Better Auth API route handler
   (authenticated)/
     layout.tsx                  ← Auth check layout (redirects if not signed in)
     protected/
@@ -407,17 +418,16 @@ components/
   auth-button.tsx               ← Login/user button (switches based on session)
   sign-in-button.tsx            ← Sign in / Sign up links
   user-button.tsx               ← User dropdown with sign-out
-  session-provider.tsx          ← Client-side SessionProvider wrapper
 lib/
-  actions/
-    auth.ts                     ← Sign-up and sign-in server actions
+  auth.ts                       ← Better Auth server config (Prisma adapter, session settings)
+  auth-client.ts                ← Better Auth client helpers (React hooks)
   db/
     prisma.ts                   ← Database client (Prisma)
   utils.ts                      ← cn() helper for classnames
 .claude/
   commands/                     ← Custom Claude Code slash commands
 CLAUDE.md                       ← Claude Code project config
-.env.example              ← Environment variable template
+.env.example                    ← Environment variable template
 ```
 
 ## Environment Variables
@@ -426,9 +436,10 @@ Copy `.env.example` to `.env` and fill in the values you need:
 
 | Variable              | Required              | Where to Get It                            |
 | --------------------- | --------------------- | ------------------------------------------ |
-| `AUTH_SECRET`         | Yes                   | Generate with `npx auth secret`            |
-| `DATABASE_URL`        | Yes                   | Supabase → Connect → ORMs → Prisma        |
-| `DIRECT_URL`          | Yes                   | Supabase → Connect → ORMs → Prisma        |
+| `BETTER_AUTH_SECRET`  | Yes                   | Generate with `openssl rand -base64 32`    |
+| `BETTER_AUTH_URL`     | Yes                   | `http://localhost:3000` for dev             |
+| `DATABASE_URL`        | Yes                   | Neon console → Connection Details → Prisma |
+| `DIRECT_URL`          | Yes                   | Neon console → Connection Details → Prisma |
 | `REPLICATE_API_TOKEN` | For image/video gen   | replicate.com/account/api-tokens           |
 | `OPENAI_API_KEY`      | For text gen (OpenAI) | platform.openai.com/api-keys               |
 | `STRIPE_SECRET_KEY`   | For payments          | dashboard.stripe.com/apikeys               |

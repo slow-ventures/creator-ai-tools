@@ -4,18 +4,39 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signUp } from "@/lib/actions/auth"
+import { authClient } from "@/lib/auth-client"
 import Link from "next/link"
-import { useActionState } from "react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function SignUpPage() {
-  const [state, action, pending] = useActionState<{ error?: string }, FormData>(
-    async (_prev, formData) => {
-      const result = await signUp(formData)
-      return result ?? {}
-    },
-    {}
-  )
+  const router = useRouter()
+  const [error, setError] = useState("")
+  const [pending, setPending] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError("")
+    setPending(true)
+
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get("name") as string
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    const { error } = await authClient.signUp.email({
+      name: name || email,
+      email,
+      password,
+    })
+
+    if (error) {
+      setError(error.message ?? "Failed to create account")
+      setPending(false)
+    } else {
+      router.push("/protected")
+    }
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
@@ -25,7 +46,7 @@ export default function SignUpPage() {
           <CardDescription>Enter your details to get started</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={action} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Name</Label>
               <Input id="name" name="name" type="text" />
@@ -38,7 +59,7 @@ export default function SignUpPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" required minLength={6} />
             </div>
-            {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" size="lg" disabled={pending}>
               {pending ? "Creating account..." : "Sign up"}
             </Button>

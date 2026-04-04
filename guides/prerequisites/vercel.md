@@ -50,7 +50,7 @@ You have two options:
 1. Go to [vercel.com/new](https://vercel.com/new)
 2. Click **Import** next to your GitHub repo
 3. Vercel auto-detects your framework (Next.js)
-4. Add your environment variables (Supabase URL, keys, etc.)
+4. Add your environment variables (Neon database URL, keys, etc.)
 5. Click **Deploy**
 
 ### Option B: Tell Claude Code
@@ -67,7 +67,7 @@ Claude Code will handle the setup for you.
 
 ## Adding environment variables
 
-Your app needs environment variables (like Supabase credentials) to work in production:
+Your app needs environment variables (like database credentials) to work in production:
 
 1. Go to your project on [vercel.com](https://vercel.com/)
 2. Click **Settings** → **Environment Variables**

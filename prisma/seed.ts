@@ -1,23 +1,28 @@
 import { PrismaClient } from "@prisma/client"
-import bcrypt from "bcryptjs"
+import { betterAuth } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
 
 const prisma = new PrismaClient()
 
-async function main() {
-  const password = await bcrypt.hash("password", 10)
+const auth = betterAuth({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  emailAndPassword: { enabled: true },
+})
 
+async function main() {
   const users = [
-    { name: "Alice", email: "alice@example.com", password },
-    { name: "Bob", email: "bob@example.com", password },
-    { name: "Charlie", email: "charlie@example.com", password },
+    { name: "Alice", email: "alice@example.com", password: "password" },
+    { name: "Bob", email: "bob@example.com", password: "password" },
+    { name: "Charlie", email: "charlie@example.com", password: "password" },
   ]
 
   for (const user of users) {
-    await prisma.user.upsert({
+    const existing = await prisma.user.findUnique({
       where: { email: user.email },
-      update: {},
-      create: user,
     })
+    if (!existing) {
+      await auth.api.signUpEmail({ body: user })
+    }
   }
 
   console.log("Seeded 3 demo users (password: 'password')")

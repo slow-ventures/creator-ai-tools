@@ -6,17 +6,17 @@ This is a Next.js app built at the Slow Ventures Creator Fund AI Hackathon. The 
 
 - **Framework**: Next.js 15 (App Router) with TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui (New York style, lucide icons)
-- **Auth**: Auth.js (NextAuth v5) — email/password with bcrypt, JWT sessions
-- **Database**: Prisma ORM → PostgreSQL on Supabase
+- **Auth**: Better Auth — email/password with database sessions
+- **Database**: Prisma ORM → PostgreSQL on Neon
 - **Hosting**: Vercel (auto-deploys on git push)
 
 # Key files
 
-- `auth.ts` — Auth.js config (providers, callbacks, JWT)
+- `lib/auth.ts` — Better Auth server config (Prisma adapter, email/password, session settings)
+- `lib/auth-client.ts` — Better Auth client helpers (React hooks for session, sign in/out)
 - `proxy.ts` — route protection middleware (all routes require login by default)
 - `prisma/schema.prisma` — database schema (single source of truth for tables)
 - `lib/db/prisma.ts` — Prisma client singleton
-- `lib/actions/auth.ts` — sign-up and sign-in server actions
 - `components/ui/` — shadcn/ui components
 - `.env` — environment variables (never commit this)
 
@@ -50,17 +50,17 @@ This project has custom slash commands the user may invoke. When they do, follow
 
 ## Server actions (not API routes)
 
-- Use Server Actions (`"use server"`) for all backend logic. Do not create API routes under `app/api/` (except the existing Auth.js route).
+- Use Server Actions (`"use server"`) for all backend logic. Do not create API routes under `app/api/` (except the existing Better Auth route).
 - Server actions go in `lib/actions/` or co-located with the page that uses them.
 
 ## Authentication
 
-- Use `auth()` from `@/auth` to get the current session in Server Components and Server Actions.
-- Use `useSession()` from `next-auth/react` to get the session in Client Components (wrapped in `<SessionProvider>`).
+- Use `auth.api.getSession({ headers: await headers() })` from `@/lib/auth` to get the current session in Server Components and Server Actions. Import `headers` from `next/headers`.
+- Use `authClient.useSession()` from `@/lib/auth-client` to get the session in Client Components (no provider wrapper needed).
 - The current user's ID is `session.user.id`.
 - All routes are protected by default via `proxy.ts`. New pages require login automatically.
 - To make a route public, add it to the `publicRoutes` array in `proxy.ts`.
-- Do not modify the Auth.js model field names (User, Account, Session, VerificationToken) — Auth.js expects them exactly as defined.
+- Do not modify the Better Auth model field names (User, Account, Session, Verification) — Better Auth expects them exactly as defined.
 - You CAN add new fields to the User model (e.g., `bio`, `avatarUrl`). Just don't rename existing ones.
 
 ## Database (Prisma)
@@ -97,13 +97,13 @@ This project has custom slash commands the user may invoke. When they do, follow
 - To deploy: `git push origin main:production` (this pushes main's code to the production branch).
 - The build command is: `prisma generate && prisma db push && next build` — database schema syncs to production automatically.
 - Environment variables for production are managed with `npx vercel env add <NAME> production` or in Vercel → Settings → Environment Variables.
-- Production uses a separate Supabase project (prod) from local development (dev).
+- Production uses a separate Neon database branch (or project) from local development.
 - The /deploy slash command handles the full commit → push to main → push to production flow.
 
 ## Environment variables
 
 - All secrets go in `.env` (never committed to git).
-- Required: `AUTH_SECRET`, `DATABASE_URL`, `DIRECT_URL`
+- Required: `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `DATABASE_URL`, `DIRECT_URL`
 - Optional: `REPLICATE_API_TOKEN`, `OPENAI_API_KEY`, `STRIPE_SECRET_KEY`, `RESEND_API_KEY`
 - When adding a new API integration, remind the user to add the key to both `.env` (local) and Vercel Settings (production).
 

@@ -1,13 +1,13 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { authClient } from "@/lib/auth-client"
 import { SignInButton } from "./sign-in-button"
 import { UserButton } from "./user-button"
 
 export function AuthButton() {
-  const { data: session, status } = useSession()
+  const { data: session, isPending } = authClient.useSession()
 
-  if (status === "loading") {
+  if (isPending) {
     return <div className="h-8 w-20 animate-pulse rounded bg-muted" />
   }
 

@@ -1,9 +1,12 @@
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
 async function AuthGate({ children }: { children: React.ReactNode }) {
-  const session = await auth()
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
   if (!session) redirect("/sign-in")
   return <>{children}</>
 }
