@@ -101,6 +101,11 @@
 
 ### Cloud Hosting
 
+- **Vercel** — Where most hackathon participants deployed. Connects to your GitHub repo and deploys on every push — no servers or Docker to deal with. Using a managed platform like this means you're not debugging infrastructure when you should be building. Going forward, we'll add the database through Vercel's Neon integration so there's less to set up and fewer moving parts — one marketplace, one dashboard.
+  - Site: https://vercel.com
+  - Docs: https://vercel.com/docs
+  - Neon Postgres via Vercel Marketplace: https://vercel.com/marketplace/neon
+
 - **Digital Ocean** — Cloud infrastructure provider. Simpler and more beginner-friendly alternative to AWS. Good for deploying apps, databases, and background workers.
   - Site: https://www.digitalocean.com
   - App Platform docs: https://docs.digitalocean.com/products/app-platform/
