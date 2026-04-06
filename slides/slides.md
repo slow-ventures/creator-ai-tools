@@ -34,9 +34,7 @@ title: "Slow Hackathon 201 - Advanced AI Coding"
     <p class="text-sm mt-2 opacity-70"><a href="https://superwhisper.com/download">Superwhisper</a></p>
   </div>
   <div class="flex-1">
-    <a href="https://otter.ai">
-      <img src="/images/otter.png" class="h-48 rounded shadow" />
-    </a>
+    <p class="text-2xl">🎙️</p>
     <p class="text-sm mt-2 opacity-70"><a href="https://otter.ai">Otter.ai</a> / <a href="https://fathom.video">Fathom</a></p>
   </div>
 </div>
@@ -269,7 +267,7 @@ Building agents into your SaaS apps with APIs and tool use
 
 Combining traditional code, database backend, and an agentic frontend for super-powerful bots
 
-- YesCoach, Nines, etc
+- YesCoach, etc
 
 ---
 
@@ -277,7 +275,7 @@ Combining traditional code, database backend, and an agentic frontend for super-
 
 Using skills to emulate an agency from brand to logo to videos to finished site
 
-- ReturnTech and client review processes
+- Client review processes
 
 ---
 
@@ -297,7 +295,7 @@ Scaling production of AI imagery to brand-approved site assets across hundreds o
 
 - Workflows, human-in-the-loop reviewers
 - Automated AI QA review and agents
-- Nines demo
+- Client demo
 
 ---
 

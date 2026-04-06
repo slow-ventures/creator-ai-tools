@@ -151,6 +151,20 @@
 
 ---
 
+### Design Tweaks
+
+- **Design in the Browser** — Tool for making small design tweaks directly in the browser. Helpful for quick visual adjustments without jumping back to code.
+  - Site: https://designinthebrowser.com/
+
+---
+
+### Web Scraping & Content Extraction
+
+- **Firecrawl** — Web scraping and crawling API that extracts clean content from websites. Particularly useful for getting past strict AI blockers on sites like Net-a-Porter and other fashion/e-commerce sites that aggressively block scrapers.
+  - Site: https://www.firecrawl.dev/
+
+---
+
 ## TAs — Tanooki Labs
 
 Need help? Reach out to the TAs from [Tanooki Labs](https://tanookilabs.com):
